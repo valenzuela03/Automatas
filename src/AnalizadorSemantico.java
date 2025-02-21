@@ -48,6 +48,7 @@ public class AnalizadorSemantico {
     private void programa(){
         siguienteToken();
         while (!error && tokenActual != null) {
+            //si se encuentra un tipo de variable se entra aqui
             if(esToken(Tokens.PR) && tokenActual.getNombre().equals("int") || tokenActual.getNombre().equals("float") ||  tokenActual.getNombre().equals("string")){
                 String tipo = tokenActual.getNombre();
                 siguienteToken();
@@ -57,31 +58,35 @@ public class AnalizadorSemantico {
                     return;
                 }
                 variables.add(new Variable(tipo, nombre, ""));
+                //si hay un if, se llama al metodo para validar que los identificadores en la comparacion existan
             } else if(esToken(Tokens.PR) && tokenActual.getNombre().equals("if")){
                 validarIf();
             }
+            // si se encuentra un identificador entra aqui
             else if(esToken(Tokens.IDENTIFICADOR)){
-                String nombre = tokenActual.getNombre();
+                String nombre = tokenActual.getNombre(); // guarda el nombre
                 if(!existe(nombre)){
                     error = true;
                     return;
                 }
-                Variable variable = obtenerVariable(nombre);
+                Variable variable = obtenerVariable(nombre); // buscamos una variable con ese nombre
                 if (variable == null) return;
                 siguienteToken();
                 siguienteToken();
                 StringBuilder valor = new StringBuilder();
-                boolean esperoOperador = true;
+                boolean esperoOperador = true; // booleano para ver si hay una operacion en la asignacion
                 String tipo = variable.getTipo();
-                while(!esToken(Tokens.PUNTO_Y_COMA) && tokenActual != null){
+                while(!esToken(Tokens.PUNTO_Y_COMA) && tokenActual != null){ // mientras no haya punto y coma
                     System.out.println(tokenActual.getTokens());
                     if(esperoOperador){
+                        //si el valro a asignar no es compatible hay error
                         if(!esOperacionValida(tipo)){
                             error = true;
                             return;
                         }
                         esperoOperador = false;
                     }else{
+                        // si hay alguna opearcion checamos que sea aritmetica
                         if(!operadorAritmetico(tokenActual)){
                             error = true;
                             return;
@@ -95,8 +100,10 @@ public class AnalizadorSemantico {
                     error = true;
                     return;
                 }
+                //actualizamos el valor a la variable
                 variable.setValor(valor.toString());
             }else if(esToken(Tokens.PR) && (tokenActual.getNombre().equals("write") || tokenActual.getNombre().equals("read"))){
+                //si es un write o read verificamos que el identificador exista
                 siguienteToken();
                 siguienteToken();
                 if(esToken(Tokens.IDENTIFICADOR)){
@@ -113,6 +120,7 @@ public class AnalizadorSemantico {
     private void validarIf(){
         siguienteToken();
         siguienteToken();
+        //si no existen los identificadores error
         if(esToken(Tokens.IDENTIFICADOR)){
             if(!existe(tokenActual.getNombre())){
                 error = true;
