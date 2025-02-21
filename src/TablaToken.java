@@ -1,3 +1,5 @@
+import utils.Tokens;
+
 public class TablaToken {
     private Tokens tokens;
     private String valor;
