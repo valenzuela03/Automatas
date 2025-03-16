@@ -178,4 +178,7 @@ public class AnalizadorSemantico {
         }
     }
 
+    public List<Variable> getVariables(){
+        return variables;
+    }
 }

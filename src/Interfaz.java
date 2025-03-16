@@ -10,12 +10,15 @@ public class Interfaz extends JFrame {
     private JTextArea outputTokensArea;
     private JTextArea outputSintacticoArea;
     private JTextArea outputSemanticoArea;
+    private JTextArea outputBajoNivelArea;
     private JButton analyzeButton;
     private JButton sintaticButton;
     private JButton semanticoButton;
+    private JButton bajoNivelButton;
     private AnalizadorLexico analizador;
     private AnalizadorSintactico analizadorSintactico;
     private AnalizadorSemantico analizadorSemantico;
+    private AnalizadorBajoNivel analizadorBajoNivel;
     private List<TablaToken> tablaToken;
 
     public Interfaz() {
@@ -50,10 +53,15 @@ public class Interfaz extends JFrame {
         semanticoButton.setEnabled(false);
         semanticoButton.addActionListener(_ -> analizarSemantico());
 
+        bajoNivelButton = new JButton("Bajo Nivel");
+        bajoNivelButton.setEnabled(false);
+        bajoNivelButton.addActionListener(_ -> analizarBajoNivel());
+
         topPanel.add(fileButton);
         topPanel.add(analyzeButton);
         topPanel.add(sintaticButton);
         topPanel.add(semanticoButton);
+        topPanel.add(bajoNivelButton);
 
         add(topPanel, BorderLayout.NORTH);
 
@@ -63,15 +71,18 @@ public class Interfaz extends JFrame {
         outputTokensArea = new JTextArea(10, 40);
         outputSintacticoArea = new JTextArea(3, 40);
         outputSemanticoArea = new JTextArea(3, 40);
+        outputBajoNivelArea = new JTextArea(3, 40);
 
         outputTokensArea.setEditable(false);
         outputSintacticoArea.setEditable(false);
         outputSemanticoArea.setEditable(false);
+        outputBajoNivelArea.setEditable(false);
 
         panel.add(createPanel("Programa", inputArea));
         panel.add(createPanel("Analisis Lexico", outputTokensArea));
         panel.add(createPanel("Analisis Sintactico", outputSintacticoArea));
         panel.add(createPanel("Analisis Semantico", outputSemanticoArea));
+        panel.add(createPanel("Analisis Bajo Nivel", outputBajoNivelArea));
 
         add(panel, BorderLayout.CENTER);
     }
@@ -113,6 +124,14 @@ public class Interfaz extends JFrame {
         analizadorSemantico.prepararAnalizadorSemantico(tablaToken);
         boolean resultado = analizadorSemantico.analizar();
         outputSemanticoArea.setText(resultado ? "Codigo correcto" : "Codigo incorrecto");
+        bajoNivelButton.setEnabled(true);
+    }
+
+    private void analizarBajoNivel() {
+        analizadorBajoNivel = new AnalizadorBajoNivel();
+        analizadorBajoNivel.prepararAnalizadorBajoNivel(tablaToken, analizadorSemantico.getVariables());
+        analizadorBajoNivel.analizar();
+        outputBajoNivelArea.setText(analizadorBajoNivel.getCode());
     }
 
     private void openFile() {
