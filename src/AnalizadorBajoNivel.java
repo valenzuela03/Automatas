@@ -105,6 +105,57 @@ public class AnalizadorBajoNivel  {
                     codigo.append(imprimirNum(variable.getNombre()));
                 }
             }else if("if".equals(tokenActual.getNombre())){
+                siguienteToken();
+                siguienteToken();
+
+                String valor1 = tokenActual.getNombre();
+                siguienteToken();
+                String operador = tokenActual.getNombre();
+                siguienteToken();
+                String valor2 = tokenActual.getNombre();
+                siguienteToken();
+                siguienteToken();
+
+                codigo.append("\t").append("CMP ").append(valor1).append(", ").append(valor2).append("\n");
+                codigo.append("\t");
+                switch (operador){
+                    case "==":
+                        codigo.append("JNE ");
+                        break;
+                    case "<>":
+                        codigo.append("JE ");
+                        break;
+                    case ">":
+                        codigo.append("JLE ");
+                        break;
+                    case "<":
+                        codigo.append("JGE ");
+                        break;
+                    case ">=":
+                        codigo.append("JL ");
+                        break;
+                    case "<=":
+                        codigo.append("JG ");
+                        break;
+                }
+                codigo.append("ELSE").append(ifLabel).append("\n");
+                while (!esToken(Tokens.LLAVE_CERRADA)){
+                    siguienteToken();
+                    recorrerTokens();
+                }
+                codigo.append("\t").append("JMP END_IF").append(ifLabel).append("\n");
+                codigo.append("ELSE").append(ifLabel).append(":\n");
+                siguienteToken();
+                if(esToken(Tokens.PR) && "else".equals(tokenActual.getNombre())){
+                    siguienteToken();
+                    siguienteToken();
+                    while (!esToken(Tokens.LLAVE_CERRADA)){
+                        recorrerTokens();
+                        siguienteToken();
+                    }
+                }
+
+                codigo.append("END_IF").append(ifLabel).append(":\n");
 
             }
         }

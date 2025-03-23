@@ -113,13 +113,11 @@ class AnalizadorLexico {
 
             if (c == '"' || c == '“') {
                 int start = i + 1;
-                i++;
-                columna++;
 
-                while (i < len && line.charAt(i) != '"' && line.charAt(i) != '”') {
+                do {
                     i++;
                     columna++;
-                }
+                } while (i < len && line.charAt(i) != '"' && line.charAt(i) != '”');
 
                 if (i < len) {
                     i++;
