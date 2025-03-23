@@ -112,6 +112,7 @@ class AnalizadorLexico {
             }
 
             if (c == '"' || c == '“') {
+                int start = i + 1;
                 i++;
                 columna++;
 
@@ -125,10 +126,13 @@ class AnalizadorLexico {
                     columna++;
                 }
 
+                String valorCadena = line.substring(start, i - 1);
+
                 tokenLista.add(Tokens.VALOR_CADENA);
-                tablaToken.add(new TablaToken(line.substring(i, i), Tokens.VALOR_CADENA));
+                tablaToken.add(new TablaToken(valorCadena, Tokens.VALOR_CADENA));
                 continue;
             }
+
             tablaToken.add(new TablaToken(String.valueOf(c), Tokens.ERROR));
             i++;
             columna++;

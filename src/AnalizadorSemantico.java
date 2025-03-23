@@ -77,7 +77,7 @@ public class AnalizadorSemantico {
                 boolean esperoOperador = true; // booleano para ver si hay una operacion en la asignacion
                 String tipo = variable.getTipo();
                 while(!esToken(Tokens.PUNTO_Y_COMA) && tokenActual != null){ // mientras no haya punto y coma
-                    System.out.println(tokenActual.getTokens());
+
                     if(esperoOperador){
                         //si el valro a asignar no es compatible hay error
                         if(!esOperacionValida(tipo)){
@@ -172,11 +172,6 @@ public class AnalizadorSemantico {
         };
     }
 
-    public void imprimir(){
-        for( Variable v : variables){
-            System.out.println(v.toString());
-        }
-    }
 
     public List<Variable> getVariables(){
         return variables;
