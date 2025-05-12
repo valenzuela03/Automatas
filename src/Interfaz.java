@@ -62,7 +62,10 @@ public class Interfaz extends JFrame {
 
         add(topPanel, BorderLayout.NORTH);
 
-        JPanel mainPanel = new JPanel(new GridLayout(2, 3, 10, 10));
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
         inputArea = new JTextArea();
         outputTokensArea = new JTextArea();
@@ -77,12 +80,26 @@ public class Interfaz extends JFrame {
         outputBajoNivelArea.setEditable(false);
         outputObjetoArea.setEditable(false);
 
-        mainPanel.add(createPanel("Programa", inputArea));
-        mainPanel.add(createPanel("Análisis Léxico", outputTokensArea));
-        mainPanel.add(createPanel("Análisis Sintáctico", outputSintacticoArea));
-        mainPanel.add(createPanel("Análisis Semántico", outputSemanticoArea));
-        mainPanel.add(createPanel("Análisis Bajo Nivel", outputBajoNivelArea));
-        mainPanel.add(createPanel("Código Objeto", outputObjetoArea));
+        // Paneles de contenido
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.weightx = 0.33; gbc.weighty = 0.5;
+        mainPanel.add(createPanel("Programa", inputArea), gbc);
+
+        gbc.gridx = 1;
+        mainPanel.add(createPanel("Análisis Léxico", outputTokensArea), gbc);
+
+        gbc.gridx = 2;
+        mainPanel.add(createPanel("Análisis Sintáctico", outputSintacticoArea), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        mainPanel.add(createPanel("Análisis Semántico", outputSemanticoArea), gbc);
+
+        gbc.gridx = 1;
+        mainPanel.add(createPanel("Análisis Bajo Nivel", outputBajoNivelArea), gbc);
+
+        gbc.gridx = 2;
+        gbc.weightx = 0.66; // Más ancho para el panel de "Código Objeto"
+        mainPanel.add(createPanel("Código Objeto", outputObjetoArea), gbc);
 
         add(mainPanel, BorderLayout.CENTER);
     }
